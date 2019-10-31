@@ -1,5 +1,5 @@
 const { join } = require("path");
-const { app, Menu, Tray, BrowserWindow } = require("electron");
+const { app, Menu, Tray, BrowserWindow, ipcMain } = require("electron");
 
 const path = require("path");
 const isDev = require("electron-is-dev");
@@ -7,13 +7,26 @@ const isDev = require("electron-is-dev");
 let mainWindowRef;
 let mainTrayRef;
 
+ipcMain.on("replySync", (event, args) => {
+  //do something with args
+  event.returnValue = "Hi, sync reply: ";
+});
+
+ipcMain.on("sendAsync", (event, args) => {
+  //do something with args
+  event.sender.send('replyAsync', "Hi, async reply");
+});
+
 function createWindow() {
   const mainWindow = new BrowserWindow({
     height: 680,
     width: 800,
     resizable: false,
     title: "Botero",
-    backgroundColor: "#333"
+    backgroundColor: "#333",
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   mainWindowRef = mainWindow;
 
@@ -39,7 +52,7 @@ function createWindow() {
   tray.setToolTip("This is my application.");
   tray.setContextMenu(contextMenu);
 
-  tray.on("click", (event) => {
+  tray.on("click", event => {
     tray.displayBalloon({
       title: "Esto es una prueba",
       content: "Contenido de prueba",
@@ -47,14 +60,14 @@ function createWindow() {
     });
   });
 
-  tray.on("double-click", (event) => {
+  tray.on("double-click", event => {
     event.preventDefault();
     if (mainWindow.isVisible()) {
       mainWindow.hide();
     } else {
       mainWindow.show();
     }
-  })
+  });
 
   mainWindow.loadURL(
     isDev
@@ -68,12 +81,12 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.on("minimize", (event) => {
+  mainWindow.on("minimize", event => {
     event.preventDefault();
     mainWindow.hide();
   });
 
-  mainWindow.on("close", (event) => {
+  mainWindow.on("close", event => {
     if (!app.isQuiting) {
       event.preventDefault();
       mainWindow.hide();
