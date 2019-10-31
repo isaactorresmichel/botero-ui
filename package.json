@@ -1,0 +1,70 @@
+{
+  "name": "botero-ui",
+  "version": "0.1.0",
+  "private": true,
+  "author": {
+    "name": "Isaac Torres Michel",
+    "email": "isaactorresmichel@outlook.com",
+    "url": "https://appren.dev"
+  },
+  "build": {
+    "appId": "com.apprendev.botero",
+    "productName": "Botero",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "dependencies": {
+    "electron-is-dev": "^1.1.0",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-scripts": "3.2.0"
+  },
+  "homepage": "./",
+  "main": "public/electron.js",
+  "scripts": {
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test",
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"npm run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-dev:single": "electron .",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "npm run build && npm run clean-electron-build",
+    "electron-pack": "electron-builder build -w",
+    "clean-electron-build": "rimraf dist"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@rescripts/cli": "0.0.13",
+    "@rescripts/rescript-env": "0.0.11",
+    "concurrently": "^5.0.0",
+    "electron": "^7.0.0",
+    "electron-builder": "^22.1.0",
+    "rimraf": "^3.0.0",
+    "typescript": "^3.6.4",
+    "wait-on": "^3.3.0"
+  }
+}
